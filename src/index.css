@@ -2,7 +2,18 @@
 @import "@heroui/styles";
 
 :root {
-  --app-max-width: 32rem;
+  --app-max-width: 28rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --app-max-width: 36rem;
+  }
+}
+
+html.dark,
+html[data-theme="dark"] {
+  color-scheme: dark;
 }
 
 html,
@@ -16,6 +27,31 @@ body {
   margin: 0;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
     env(safe-area-inset-left);
-  background: var(--background, #0a0a0a);
-  color: var(--foreground, #fafafa);
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.app-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+.app-shell::before {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, color-mix(in oklch, var(--accent) 18%, transparent), transparent),
+    var(--background);
+}
+
+.feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing) * 3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }

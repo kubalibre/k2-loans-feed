@@ -1,65 +1,83 @@
+import { Chip, Tabs } from "@heroui/react";
 import type { SortKey } from "../api/types";
+import { FilterSelect } from "./FilterSelect";
 
-const PLATFORM_OPTIONS = [
-  { value: "", label: "Все платформы" },
-  { value: "lender", label: "lender" },
-  { value: "vbeton", label: "vbeton" },
-  { value: "fintrack", label: "fintrack" },
+const PLATFORMS = [
+  { id: "all", label: "Все" },
+  { id: "lender", label: "Lender" },
+  { id: "vbeton", label: "Vbeton" },
+  { id: "fintrack", label: "Fintrack" },
 ];
 
-const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: "rate:asc", label: "Ставка ↑" },
-  { value: "rate:desc", label: "Ставка ↓" },
-  { value: "amount:asc", label: "Сумма ↑" },
-  { value: "amount:desc", label: "Сумма ↓" },
-  { value: "term:asc", label: "Срок ↑" },
-  { value: "date:desc", label: "Дата ↓" },
+const SORT_OPTIONS: { id: SortKey; label: string }[] = [
+  { id: "rate:asc", label: "Ставка ↑" },
+  { id: "rate:desc", label: "Ставка ↓" },
+  { id: "amount:asc", label: "Сумма ↑" },
+  { id: "amount:desc", label: "Сумма ↓" },
+  { id: "term:asc", label: "Срок ↑" },
+  { id: "date:desc", label: "Дата ↓" },
 ];
-
-const selectClass =
-  "w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm text-foreground outline-none focus:border-blue-500";
 
 interface FilterBarProps {
   platformName: string;
   sort: SortKey;
+  total?: number;
+  isFetching?: boolean;
   onPlatformChange: (value: string) => void;
   onSortChange: (value: SortKey) => void;
 }
 
-export function FilterBar({ platformName, sort, onPlatformChange, onSortChange }: FilterBarProps) {
+export function FilterBar({
+  platformName,
+  sort,
+  total,
+  isFetching,
+  onPlatformChange,
+  onSortChange,
+}: FilterBarProps) {
+  const platformKey = platformName || "all";
+
   return (
-    <div className="sticky top-0 z-10 -mx-4 mb-4 border-b border-white/10 bg-zinc-950/80 px-4 py-3 backdrop-blur-lg">
-      <h1 className="mb-3 text-xl font-semibold tracking-tight">Займы</h1>
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <label className="flex flex-col gap-1 text-xs text-zinc-400">
-          Платформа
-          <select
-            className={selectClass}
-            value={platformName}
-            onChange={(e) => onPlatformChange(e.target.value)}
-          >
-            {PLATFORM_OPTIONS.map((o) => (
-              <option key={o.value || "all"} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="flex flex-col gap-1 text-xs text-zinc-400">
-          Сортировка
-          <select
-            className={selectClass}
-            value={sort}
-            onChange={(e) => onSortChange(e.target.value as SortKey)}
-          >
-            {SORT_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-        </label>
+    <header className="sticky top-0 z-20 -mx-4 mb-4 px-4 pt-2 pb-4 backdrop-blur-md">
+      <div className="card card--secondary rounded-2xl p-4 shadow-sm">
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <div>
+            <h1 className="text-lg font-semibold tracking-tight">Займы</h1>
+            <p className="mt-0.5 text-sm text-muted">Сравнение предложений с платформ</p>
+          </div>
+          {total != null && (
+            <Chip size="sm" variant="soft" color="accent">
+              {total}
+              {isFetching ? "…" : ""}
+            </Chip>
+          )}
+        </div>
+
+        <Tabs
+          variant="secondary"
+          selectedKey={platformKey}
+          onSelectionChange={(key) => onPlatformChange(key === "all" ? "" : String(key))}
+          className="mb-3"
+        >
+          <Tabs.ListContainer>
+            <Tabs.List aria-label="Платформа">
+              {PLATFORMS.map((p) => (
+                <Tabs.Tab key={p.id} id={p.id}>
+                  {p.label}
+                </Tabs.Tab>
+              ))}
+              <Tabs.Indicator />
+            </Tabs.List>
+          </Tabs.ListContainer>
+        </Tabs>
+
+        <FilterSelect
+          label="Сортировка"
+          selectedKey={sort}
+          options={SORT_OPTIONS}
+          onChange={(id) => onSortChange(id as SortKey)}
+        />
       </div>
-    </div>
+    </header>
   );
 }
