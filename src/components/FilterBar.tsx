@@ -66,7 +66,6 @@ export function FilterBar({
                   {p.label}
                 </Tabs.Tab>
               ))}
-              <Tabs.Indicator />
             </Tabs.List>
           </Tabs.ListContainer>
         </Tabs>
