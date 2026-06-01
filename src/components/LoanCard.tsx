@@ -1,4 +1,4 @@
-import { Button, Card, Chip, Separator } from "@heroui/react";
+import { Button, Card, Separator } from "@heroui/react";
 import type { PublicLoan } from "../api/types";
 import { openLoanUrl } from "../telegram/openExternal";
 
@@ -12,50 +12,81 @@ interface LoanCardProps {
   loan: PublicLoan;
 }
 
-export function LoanCard({ loan }: LoanCardProps) {
-  const platformLabel = PLATFORM_LABEL[loan.platform_name] ?? loan.platform_name;
+function buildDetailsLine(loan: PublicLoan): string | null {
+  const parts = [
+    loan.date,
+    loan.collateral !== "—" ? loan.collateral : null,
+    loan.ltv !== "—" ? `LTV ${loan.ltv}` : null,
+  ].filter(Boolean);
+  return parts.length > 0 ? parts.join(" · ") : null;
+}
+
+function PlatformLogo({ loan }: { loan: PublicLoan }) {
+  const label = PLATFORM_LABEL[loan.platform_name] ?? loan.platform_name;
+
+  if (loan.platform_logo_url) {
+    return (
+      <img
+        src={loan.platform_logo_url}
+        alt=""
+        className="loan-card__logo"
+        width={32}
+        height={32}
+        loading="lazy"
+        decoding="async"
+      />
+    );
+  }
 
   return (
-    <Card variant="secondary" className="w-full">
-      <Card.Header className="flex flex-row items-start justify-between gap-3">
-        <Chip size="sm" variant="soft" color="accent">
-          {platformLabel}
-        </Chip>
-        <div className="text-right">
-          <p className="text-sm font-medium">{loan.amount}</p>
-          <p className="text-xs text-muted">{loan.term}</p>
+    <span className="loan-card__logo-fallback" aria-hidden="true">
+      {label.charAt(0).toUpperCase()}
+    </span>
+  );
+}
+
+export function LoanCard({ loan }: LoanCardProps) {
+  const platformLabel = PLATFORM_LABEL[loan.platform_name] ?? loan.platform_name;
+  const details = buildDetailsLine(loan);
+
+  return (
+    <Card variant="secondary" className="loan-card w-full">
+      <Card.Header className="loan-card__header">
+        <PlatformLogo loan={loan} />
+        <div className="min-w-0 flex-1">
+          <Card.Title className="loan-card__title truncate">{loan.borrower_name}</Card.Title>
+          <Card.Description className="loan-card__platform">{platformLabel}</Card.Description>
         </div>
       </Card.Header>
 
-      <Card.Content className="flex flex-col gap-3 pt-0">
-        <div>
-          <Card.Title className="text-3xl font-semibold tracking-tight">{loan.rate}</Card.Title>
-          <Card.Description className="mt-1 line-clamp-2">{loan.borrower_name}</Card.Description>
+      <Card.Content className="loan-card__body">
+        <div className="loan-card__metrics" role="group" aria-label="Условия займа">
+          <div className="loan-card__metric loan-card__metric--primary">
+            <span className="loan-card__metric-value tabular-nums">{loan.amount}</span>
+            <span className="loan-card__metric-label">Сумма</span>
+          </div>
+          <div className="loan-card__metric loan-card__metric--primary">
+            <span className="loan-card__metric-value tabular-nums">{loan.term}</span>
+            <span className="loan-card__metric-label">Срок</span>
+          </div>
+          <div className="loan-card__metric">
+            <span className="loan-card__metric-value tabular-nums">{loan.rate}</span>
+            <span className="loan-card__metric-label">Ставка</span>
+          </div>
         </div>
-
-        <div className="flex flex-wrap gap-2">
-          <Chip size="sm" variant="tertiary">
-            {loan.date}
-          </Chip>
-          {loan.collateral !== "—" && (
-            <Chip size="sm" variant="tertiary">
-              {loan.collateral}
-            </Chip>
-          )}
-          {loan.ltv !== "—" && (
-            <Chip size="sm" variant="tertiary">
-              LTV {loan.ltv}
-            </Chip>
-          )}
-        </div>
+        {details && <p className="loan-card__details">{details}</p>}
       </Card.Content>
 
       {loan.card_url && (
         <>
           <Separator />
-          <Card.Footer>
-            <Button variant="primary" className="w-full" onPress={() => openLoanUrl(loan.card_url)}>
-              Открыть на платформе
+          <Card.Footer className="loan-card__footer">
+            <Button
+              variant="primary"
+              className="w-full"
+              onPress={() => openLoanUrl(loan.card_url)}
+            >
+              Открыть займ
             </Button>
           </Card.Footer>
         </>

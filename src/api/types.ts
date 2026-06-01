@@ -3,6 +3,7 @@
 export interface PublicLoan {
   id: string;
   platform_name: string;
+  platform_logo_url: string | null;
   rate: string;
   term: string;
   amount: string;
@@ -17,14 +18,9 @@ export interface PublicLoansResponse {
   loans: PublicLoan[];
   meta: {
     total: number;
+    best_rate: string | null;
+    platforms_count: number;
     sortBy: string;
     sortOrder: "asc" | "desc";
   };
-}
-
-export type SortKey = "rate:asc" | "rate:desc" | "amount:asc" | "amount:desc" | "term:asc" | "date:desc";
-
-export interface LoansQuery {
-  platformName?: string;
-  sort: SortKey;
 }

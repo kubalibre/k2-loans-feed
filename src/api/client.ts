@@ -1,4 +1,4 @@
-import type { LoansQuery, PublicLoansResponse } from "./types";
+import type { PublicLoansResponse } from "./types";
 
 const API_URL = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
 
@@ -9,14 +9,9 @@ export function getApiBaseUrl(): string {
   return API_URL;
 }
 
-export async function fetchPublicLoans(query: LoansQuery): Promise<PublicLoansResponse> {
-  const [sortBy, sortOrder] = query.sort.split(":") as [string, "asc" | "desc"];
-  const params = new URLSearchParams({ sortBy, sortOrder });
-  if (query.platformName) {
-    params.set("platformName", query.platformName);
-  }
-
-  const response = await fetch(`${getApiBaseUrl()}/public/loans?${params}`);
+/** Public feed: fixed order (best rate first), no client-side filters. */
+export async function fetchPublicLoans(): Promise<PublicLoansResponse> {
+  const response = await fetch(`${getApiBaseUrl()}/public/loans`);
   if (!response.ok) {
     const text = await response.text();
     throw new Error(text || `HTTP ${response.status}`);

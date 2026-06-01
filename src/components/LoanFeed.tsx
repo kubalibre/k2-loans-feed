@@ -1,37 +1,26 @@
 import { Alert, Button, Spinner } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
 import { fetchPublicLoans } from "../api/client";
-import type { LoansQuery, SortKey } from "../api/types";
-import { FilterBar } from "./FilterBar";
+import { FeedStats } from "./FeedStats";
 import { LoanCard } from "./LoanCard";
 import { LoanCardSkeleton } from "./LoanCardSkeleton";
 
 export function LoanFeed() {
-  const [platformName, setPlatformName] = useState("");
-  const [sort, setSort] = useState<SortKey>("rate:asc");
-
-  const query: LoansQuery = useMemo(
-    () => ({ platformName: platformName || undefined, sort }),
-    [platformName, sort],
-  );
-
   const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
-    queryKey: ["public-loans", query],
-    queryFn: () => fetchPublicLoans(query),
+    queryKey: ["public-loans"],
+    queryFn: () => fetchPublicLoans(),
     staleTime: 60_000,
   });
 
   return (
     <div className="mx-auto w-full max-w-[var(--app-max-width)] px-4 pb-10">
-      <FilterBar
-        platformName={platformName}
-        sort={sort}
-        total={data?.meta.total}
-        isFetching={isFetching && !isLoading}
-        onPlatformChange={setPlatformName}
-        onSortChange={setSort}
-      />
+      <header className="feed-header">
+        <h1 className="feed-header__title">Займы</h1>
+        <p className="feed-header__subtitle">Предложения с инвестиционных платформ</p>
+        {data?.meta && (
+          <FeedStats meta={data.meta} isFetching={isFetching && !isLoading} />
+        )}
+      </header>
 
       {isLoading && (
         <div className="feed-list" aria-busy="true">
@@ -60,7 +49,7 @@ export function LoanFeed() {
         <Alert status="default" className="mt-2">
           <Alert.Content>
             <Alert.Title>Нет займов</Alert.Title>
-            <Alert.Description>Попробуйте другую платформу или сортировку.</Alert.Description>
+            <Alert.Description>Сейчас в ленте нет активных предложений.</Alert.Description>
           </Alert.Content>
         </Alert>
       )}
