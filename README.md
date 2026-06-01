@@ -33,11 +33,18 @@ npm run preview
 
 Артефакт: `dist/` (статика).
 
+## Production (Railway)
+
+- https://loans-feed-production.up.railway.app
+- API: `https://admin-api-production-4a7f.up.railway.app/public/loans`
+
+Nginx слушает переменную `PORT` (см. `nginx.conf.template`) — иначе healthcheck на Railway падает.
+
 ## Деплой (Railway / nginx)
 
 1. Соберите с `VITE_API_URL`, указывающим на prod API.
-2. Раздавайте `dist/` как static site (см. `Dockerfile` + `nginx.conf`).
-3. В BotFather укажите HTTPS URL Mini App на этот сервис.
+2. Раздавайте `dist/` как static site (см. `Dockerfile`).
+3. В BotFather укажите HTTPS URL Mini App на production-домен.
 
 ## Стек
 
