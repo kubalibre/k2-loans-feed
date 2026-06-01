@@ -83,7 +83,8 @@ export function LoanCard({ loan }: LoanCardProps) {
           <Card.Footer className="loan-card__footer">
             <Button
               variant="primary"
-              className="w-full"
+              size="sm"
+              className="loan-card__cta"
               onPress={() => openLoanUrl(loan.card_url)}
             >
               Открыть займ

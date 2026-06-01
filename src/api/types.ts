@@ -19,6 +19,7 @@ export interface PublicLoansResponse {
   meta: {
     total: number;
     best_rate: string | null;
+    /** All platforms configured in the system (not only those with loans in feed). */
     platforms_count: number;
     sortBy: string;
     sortOrder: "asc" | "desc";

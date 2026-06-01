@@ -3,6 +3,9 @@
 
 :root {
   --app-max-width: 28rem;
+  --app-radius: 0.75rem;
+  --app-radius-control: 0.625rem;
+  --app-border: 1px solid var(--border);
 }
 
 @media (min-width: 640px) {
@@ -90,26 +93,41 @@ body {
 }
 
 .feed-stat {
-  border: 1px solid var(--border);
-  border-radius: calc(var(--radius) * 1.25);
+  border: var(--app-border);
+  border-radius: var(--app-radius);
   background: var(--surface);
   padding: 10px 12px;
+  box-shadow: none;
 }
 
 
 .feed-stat__value {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: 1rem;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 .feed-stat__label {
   margin: 2px 0 0;
   font-size: 0.6875rem;
+  font-weight: 500;
   color: var(--muted);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+.loan-card.card {
+  gap: 0.75rem;
+  padding: 0.875rem;
+  border: var(--app-border);
+  border-radius: var(--app-radius) !important;
+  background: var(--surface) !important;
+  box-shadow: none !important;
+}
+
+.loan-card.card--secondary {
+  background: var(--surface) !important;
 }
 
 .loan-card__header {
@@ -175,15 +193,15 @@ body {
 }
 
 .loan-card__metric-value {
-  font-size: 1.0625rem;
+  font-size: 1rem;
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.3;
   letter-spacing: -0.01em;
 }
 
 .loan-card__metric--primary .loan-card__metric-value {
-  font-size: 1.1875rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .loan-card__metric-label {
@@ -203,4 +221,20 @@ body {
 
 .loan-card__footer {
   padding-top: 0 !important;
+}
+
+.loan-card__footer .button {
+  width: 100%;
+  height: 2.5rem;
+  border-radius: var(--app-radius-control) !important;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+
+.loan-card__footer .button--primary {
+  --button-bg: var(--accent);
+  --button-bg-hover: var(--accent-hover);
+  --button-bg-pressed: var(--accent-hover);
+  --button-fg: var(--accent-foreground);
 }
