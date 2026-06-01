@@ -18,6 +18,7 @@ export interface PublicLoansResponse {
   loans: PublicLoan[];
   meta: {
     total: number;
+    /** Highest rate in feed (max). */
     best_rate: string | null;
     /** All platforms configured in the system (not only those with loans in feed). */
     platforms_count: number;
