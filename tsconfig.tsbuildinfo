@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/api/client.ts","./src/api/types.ts","./src/components/filterbar.tsx","./src/components/loancard.tsx","./src/components/loanfeed.tsx","./src/telegram/inittelegram.ts","./src/telegram/mocktelegram.ts","./src/telegram/openexternal.ts"],"errors":true,"version":"5.9.3"}
