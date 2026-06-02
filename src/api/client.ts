@@ -9,7 +9,7 @@ export function getApiBaseUrl(): string {
   return API_URL;
 }
 
-/** Public feed: fixed order (best rate first), no client-side filters. */
+/** Public feed: newest first (date desc), no client-side filters. */
 export async function fetchPublicLoans(): Promise<PublicLoansResponse> {
   const response = await fetch(`${getApiBaseUrl()}/public/loans`);
   if (!response.ok) {
