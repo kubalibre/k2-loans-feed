@@ -17,6 +17,8 @@ function buildDetailsLine(loan: PublicLoan): string | null {
     loan.date,
     loan.collateral !== "—" ? loan.collateral : null,
     loan.ltv !== "—" ? `LTV ${loan.ltv}` : null,
+    loan.repayment_type !== "—" ? `Погашение: ${loan.repayment_type}` : null,
+    loan.loan_purpose !== "—" ? `Цель: ${loan.loan_purpose}` : null,
   ].filter(Boolean);
   return parts.length > 0 ? parts.join(" · ") : null;
 }

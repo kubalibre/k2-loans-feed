@@ -11,6 +11,8 @@ export interface PublicLoan {
   borrower_name: string;
   collateral: string;
   ltv: string;
+  repayment_type: string;
+  loan_purpose: string;
   card_url: string;
 }
 
