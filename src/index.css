@@ -64,12 +64,8 @@ body {
 }
 
 .feed-header {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  margin: 0 -4px 16px;
-  padding: 8px 4px 12px;
-  background: transparent;
+  margin: 0 0 16px;
+  padding: 0 0 4px;
 }
 
 .feed-header__title {
