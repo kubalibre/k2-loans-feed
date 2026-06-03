@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Карточка займа — 3 варианта (v2)</title>
+  <style>
+    :root {
+      --bg: #141414;
+      --surface: #1e1e1e;
+      --surface-2: #242424;
+      --text: #e4e4e4;
+      --muted: #888;
+      --border: #333;
+      --accent: #599ce7;
+      --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
+      --phone-w: 390px;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --touch-min: 44px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      line-height: 1.45;
+    }
+
+    h1 { font-size: 1.25rem; margin: 0 0 8px; }
+    .intro, .skills-applied {
+      color: var(--muted);
+      font-size: 0.8125rem;
+      max-width: 52rem;
+      margin-bottom: 12px;
+    }
+
+    .skills-applied {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .skills-applied ul {
+      margin: 8px 0 0;
+      padding-left: 1.1rem;
+      color: var(--muted);
+    }
+
+    .skills-applied li + li { margin-top: 4px; }
+
+    .variants-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 16px 0;
+    }
+
+    .variants-nav button {
+      min-height: var(--touch-min);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.8125rem;
+      cursor: pointer;
+    }
+
+    .variants-nav button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .variants-nav button[aria-pressed="true"] {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .variant-panel { display: none; max-width: 52rem; }
+    .variant-panel.active { display: block; }
+
+    .tradeoffs {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      background: var(--surface);
+    }
+
+    .tradeoffs h2 { margin: 0 0 8px; font-size: 0.9375rem; }
+    .tradeoffs ul {
+      margin: 0;
+      padding-left: 1.1rem;
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+    .tradeoffs li + li { margin-top: 6px; }
+    .tradeoffs strong { color: var(--text); }
+
+    .phone {
+      max-width: var(--phone-w);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .phone-bar {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .phone-content { padding: 14px; overflow-x: hidden; }
+
+    .feed-title { font-weight: 600; font-size: 1.05rem; }
+    .feed-sub { font-size: 0.8125rem; color: var(--muted); margin-top: 2px; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 12px 0 14px;
+    }
+
+    .stat {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      background: var(--surface-2);
+    }
+
+    .stat-val {
+      font-size: 1rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-lbl {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 2px;
+      letter-spacing: 0.04em;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px;
+      margin-bottom: 10px;
+      background: var(--surface-2);
+    }
+
+    .card-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+
+    /* Hero amount — full width, scales for long values (ui-ux-pro-max: no truncate on critical data) */
+    .amount-hero {
+      margin-bottom: 8px;
+    }
+
+    .amount-hero__value {
+      display: block;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      font-size: clamp(1.125rem, 5.2vw, 1.375rem);
+      word-break: normal;
+      overflow-wrap: anywhere;
+      /* never ellipsis on amount */
+    }
+
+    .amount-hero__label {
+      display: block;
+      margin-top: 2px;
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .metrics-secondary {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 10px;
+    }
+
+    .metric-sec__val {
+      font-size: 1rem;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .metric-sec__lbl {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 2px;
+      letter-spacing: 0.04em;
+    }
+
+    .card-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .platform-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .logo-fb {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .borrower-muted {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 8px 0 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* A: tags + ghost */
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+    .tag {
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: var(--surface);
+    }
+    .purpose {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0 0 10px;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .btn-ghost {
+      width: 100%;
+      min-height: var(--touch-min);
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .btn-ghost:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* B: meta grid */
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 10px;
+      margin: 8px 0;
+      font-size: 12px;
+    }
+    .meta-key {
+      color: var(--muted);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .meta-val {
+      margin-top: 1px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .meta-item--full { grid-column: 1 / -1; }
+    .meta-val--wrap {
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border);
+      min-height: var(--touch-min);
+    }
+    .link-cta {
+      min-height: var(--touch-min);
+      display: inline-flex;
+      align-items: center;
+      padding: 0 4px;
+      font-size: 14px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .link-cta:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+      border-radius: 4px;
+    }
+
+    /* C: tap card */
+    .card-tap {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    .card-tap:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .facts {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 4px 10px;
+      margin: 8px 0;
+      font-size: 12px;
+    }
+    .fact-key { color: var(--muted); }
+    .fact-val--clamp {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      min-height: var(--touch-min);
+    }
+    .open-hint { font-size: 13px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <h1>Карточка займа — v2 (по скиллам)</h1>
+
+  <div class="skills-applied">
+    <strong>Применены скиллы:</strong>
+    <ul>
+      <li><strong>ui-ux-pro-max</strong> — метрики первыми; touch ≥44px; focus-visible; mobile-first, без horizontal scroll; сумма не обрезается.</li>
+      <li><strong>frontend-design</strong> — сдержанный utilitarian/fintech тон; спокойный CTA; без кричащего primary на каждой карточке.</li>
+      <li><strong>web-design-guidelines</strong> — tabular-nums, семантика кнопок/ссылок, контраст muted/text.</li>
+    </ul>
+  </div>
+
+  <p class="intro">
+    Исправления: hero-сумма на всю ширину (stress: 100&nbsp;000&nbsp;000&nbsp;₽), срок+ставка компактно,
+    доп. поля структурированы, заёмщик внизу, CTA не доминирует в ленте.
+  </p>
+
+  <div class="variants-nav" role="tablist" aria-label="Варианты карточки">
+    <button type="button" role="tab" aria-pressed="true" data-variant="a">A · Hero + теги</button>
+    <button type="button" role="tab" aria-pressed="false" data-variant="b">B · Hero + сетка</button>
+    <button type="button" role="tab" aria-pressed="false" data-variant="c">C · Hero + tap</button>
+  </div>
+
+  <!-- A -->
+  <section class="variant-panel active" id="panel-a" role="tabpanel">
+    <div class="tradeoffs">
+      <h2>A — hero-сумма, теги, ghost-кнопка</h2>
+      <ul>
+        <li><strong>Плюс:</strong> любая длина суммы на отдельной строке; лента спокойная; быстрый скан «сколько / срок / ставка».</li>
+        <li><strong>Минус:</strong> карточка +~12px по высоте; цель займа — 2 строки max; ghost слабее primary по CTR.</li>
+        <li><strong>Когда:</strong> длинный список, приоритет сравнения условий (рекомендуется для 100M+).</li>
+      </ul>
+    </div>
+    <div class="phone">
+      <div class="phone-bar">390px · вариант A · stress 100 млн</div>
+      <div class="phone-content">
+        <div class="feed-title">Займы</div>
+        <div class="feed-sub">Предложения с инвестиционных платформ</div>
+
+        <article class="card">
+          <div class="card-label">Stress: 100 млн ₽</div>
+          <div class="card-top-row">
+            <div class="amount-hero" style="flex:1;min-width:0">
+              <span class="amount-hero__value" title="100 000 000 ₽">100&nbsp;000&nbsp;000&nbsp;₽</span>
+              <span class="amount-hero__label">Сумма</span>
+            </div>
+            <span class="platform-pill"><span class="logo-fb">L</span>Lender</span>
+          </div>
+          <div class="metrics-secondary">
+            <div><div class="metric-sec__val">24&nbsp;мес</div><div class="metric-sec__lbl">Срок</div></div>
+            <div><div class="metric-sec__val">22%</div><div class="metric-sec__lbl">Ставка</div></div>
+          </div>
+          <div class="tags">
+            <span class="tag">15.06.2026</span>
+            <span class="tag">Залог</span>
+            <span class="tag">LTV 55%</span>
+          </div>
+          <p class="borrower-muted">ООО «КрупныйЗастрой»</p>
+          <button type="button" class="btn-ghost">Открыть займ</button>
+        </article>
+
+        <article class="card">
+          <div class="card-top-row">
+            <div class="amount-hero" style="flex:1;min-width:0">
+              <span class="amount-hero__value" title="1 689 825 ₽">1&nbsp;689&nbsp;825&nbsp;₽</span>
+              <span class="amount-hero__label">Сумма</span>
+            </div>
+            <span class="platform-pill"><span class="logo-fb">V</span>Vbeton</span>
+          </div>
+          <div class="metrics-secondary">
+            <div><div class="metric-sec__val">491&nbsp;день</div><div class="metric-sec__lbl">Срок</div></div>
+            <div><div class="metric-sec__val">30%</div><div class="metric-sec__lbl">Ставка</div></div>
+          </div>
+          <div class="tags">
+            <span class="tag">02.06.2026</span>
+            <span class="tag">Залог</span>
+            <span class="tag">LTV 187.75%</span>
+            <span class="tag">Индив. график</span>
+          </div>
+          <p class="purpose">Цель: Готовые дома на отдельных з/у (земельных участках)</p>
+          <p class="borrower-muted">Куванов Андрей Николаевич ИП</p>
+          <button type="button" class="btn-ghost">Открыть займ</button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- B -->
+  <section class="variant-panel" id="panel-b" role="tabpanel">
+    <div class="tradeoffs">
+      <h2>B — hero-сумма + сетка полей + ссылка</h2>
+      <ul>
+        <li><strong>Плюс:</strong> все доп. поля с подписями; сумма читается целиком; нет full-width синей кнопки.</li>
+        <li><strong>Минус:</strong> самая высокая карточка; на 100M шрифт суммы чуть меньше из-за clamp.</li>
+        <li><strong>Когда:</strong> важны LTV, погашение, цель без «каши».</li>
+      </ul>
+    </div>
+    <div class="phone">
+      <div class="phone-bar">390px · вариант B</div>
+      <div class="phone-content">
+        <article class="card">
+          <div class="amount-hero">
+            <span class="amount-hero__value" title="100 000 000 ₽">100&nbsp;000&nbsp;000&nbsp;₽</span>
+            <span class="amount-hero__label">Сумма</span>
+          </div>
+          <div class="metrics-secondary">
+            <div><div class="metric-sec__val">24&nbsp;мес</div><div class="metric-sec__lbl">Срок</div></div>
+            <div><div class="metric-sec__val">22%</div><div class="metric-sec__lbl">Ставка</div></div>
+          </div>
+          <div class="meta-grid">
+            <div><div class="meta-key">Дата</div><div class="meta-val">15.06.2026</div></div>
+            <div><div class="meta-key">Залог</div><div class="meta-val">Залог</div></div>
+            <div><div class="meta-key">LTV</div><div class="meta-val">55%</div></div>
+            <div><div class="meta-key">Погашение</div><div class="meta-val">Аннуитет</div></div>
+            <div class="meta-item--full">
+              <div class="meta-key">Цель</div>
+              <div class="meta-val meta-val--wrap">Финансирование девелоперского проекта</div>
+            </div>
+          </div>
+          <div class="card-foot">
+            <p class="borrower-muted" style="margin:0">ООО «КрупныйЗастрой» · Lender</p>
+            <a href="#" class="link-cta" onclick="return false">Открыть →</a>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="amount-hero">
+            <span class="amount-hero__value" title="1 689 825 ₽">1&nbsp;689&nbsp;825&nbsp;₽</span>
+            <span class="amount-hero__label">Сумма</span>
+          </div>
+          <div class="metrics-secondary">
+            <div><div class="metric-sec__val">491&nbsp;день</div><div class="metric-sec__lbl">Срок</div></div>
+            <div><div class="metric-sec__val">30%</div><div class="metric-sec__lbl">Ставка</div></div>
+          </div>
+          <div class="meta-grid">
+            <div><div class="meta-key">Дата</div><div class="meta-val">02.06.2026</div></div>
+            <div><div class="meta-key">LTV</div><div class="meta-val">187.75%</div></div>
+            <div class="meta-item--full">
+              <div class="meta-key">Погашение</div><div class="meta-val">Индивидуальный график</div>
+            </div>
+            <div class="meta-item--full">
+              <div class="meta-key">Цель</div>
+              <div class="meta-val meta-val--wrap">Готовые дома на отдельных з/у</div>
+            </div>
+          </div>
+          <div class="card-foot">
+            <p class="borrower-muted" style="margin:0">Куванов А. Н. ИП · Vbeton</p>
+            <a href="#" class="link-cta" onclick="return false">Открыть →</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- C -->
+  <section class="variant-panel" id="panel-c" role="tabpanel">
+    <div class="tradeoffs">
+      <h2>C — hero-сумма, факты, вся карточка кликабельна</h2>
+      <ul>
+        <li><strong>Плюс:</strong> минимум шума; 100M на hero-строке; паттерн TG «тап по карточке».</li>
+        <li><strong>Минус:</strong> кликабельность менее очевидна; для SR нужна скрытая кнопка в реализации.</li>
+        <li><strong>Когда:</strong> Mini App, максимум карточек на экране.</li>
+      </ul>
+    </div>
+    <div class="phone">
+      <div class="phone-bar">390px · вариант C</div>
+      <div class="phone-content">
+        <a class="card card-tap" href="#" onclick="return false" aria-label="Открыть займ 100 000 000 ₽ на Lender">
+          <div class="amount-hero">
+            <span class="amount-hero__value">100&nbsp;000&nbsp;000&nbsp;₽</span>
+            <span class="amount-hero__label">Сумма</span>
+          </div>
+          <div class="metrics-secondary">
+            <div><div class="metric-sec__val">24&nbsp;мес</div><div class="metric-sec__lbl">Срок</div></div>
+            <div><div class="metric-sec__val">22%</div><div class="metric-sec__lbl">Ставка</div></div>
+          </div>
+          <dl class="facts">
+            <dt class="fact-key">Дата</dt><dd>15.06.2026</dd>
+            <dt class="fact-key">Залог</dt><dd>Залог · LTV 55%</dd>
+          </dl>
+          <div class="card-bottom">
+            <p class="borrower-muted" style="margin:0">Lender · ООО «КрупныйЗастрой»</p>
+            <span class="open-hint">Открыть ›</span>
+          </div>
+        </a>
+
+        <a class="card card-tap" href="#" onclick="return false" aria-label="Открыть займ 1 689 825 ₽ на Vbeton">
+          <div class="amount-hero">
+            <span class="amount-hero__value">1&nbsp;689&nbsp;825&nbsp;₽</span>
+            <span class="amount-hero__label">Сумма</span>
+          </div>
+          <div class="metrics-secondary">
+            <div><div class="metric-sec__val">491&nbsp;день</div><div class="metric-sec__lbl">Срок</div></div>
+            <div><div class="metric-sec__val">30%</div><div class="metric-sec__lbl">Ставка</div></div>
+          </div>
+          <dl class="facts">
+            <dt class="fact-key">Залог</dt><dd>Залог · LTV 187.75%</dd>
+            <dt class="fact-key">Цель</dt><dd class="fact-val--clamp">Готовые дома на отдельных з/у (земельных участках)</dd>
+          </dl>
+          <div class="card-bottom">
+            <p class="borrower-muted" style="margin:0">Vbeton · Куванов А. Н. ИП</p>
+            <span class="open-hint">Открыть ›</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    document.querySelectorAll("[data-variant]").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const id = tab.dataset.variant;
+        document.querySelectorAll("[data-variant]").forEach((t) =>
+          t.setAttribute("aria-pressed", t === tab ? "true" : "false")
+        );
+        document.querySelectorAll(".variant-panel").forEach((p) =>
+          p.classList.toggle("active", p.id === "panel-" + id)
+        );
+      });
+    });
+  </script>
+</body>
+</html>

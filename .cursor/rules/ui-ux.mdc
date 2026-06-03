@@ -1,0 +1,31 @@
+---
+description: UI/UX — ОБЯЗАТЕЛЬНО читать скиллы перед любой UI/mockup задачей
+globs: src/**/*.{tsx,css},docs/mockups/**/*
+alwaysApply: false
+---
+
+# UI/UX (k2-loans-feed)
+
+## Блокирующее правило
+
+Любая задача про **UI, UX, layout, mockup, стили, компоненты, CTA, a11y** — **до** mockup или правок кода агент **читает и применяет**:
+
+1. `.agents/skills/ui-ux-pro-max/SKILL.md`
+2. `.agents/skills/frontend-design/SKILL.md` (mockup / визуал; без чужого branding)
+3. `.agents/skills/web-design-guidelines/SKILL.md` — перед отдачей mockup или TSX (self-check)
+
+**Запрещено** отдавать UI/mockup/стили без чтения скиллов. **Никогда** не пропускать. В ответе — audit (формат `file:line`) + 2–4 пункта из скиллов.
+
+## Продуктовые ограничения
+
+- Baseline и согласование владельца — `AGENT.md` (без «ок» не менять визуал в prod-коде).
+- Mockup → `docs/mockups/*.html` → «ок» → код.
+- **Сумма займа:** до 100+ млн ₽ — hero-строка на всю ширину, `tabular-nums`, без обрезки `text-overflow: ellipsis` на сумме; допустимо сокращение «100 млн ₽» + полное в `title`/`aria-label`.
+
+## Стек
+
+HeroUI v3 + Tailwind v4 · Telegram Mini App · mobile-first.
+
+## После правок
+
+`npm run build` · проверка 5174 · safe-area TG.
