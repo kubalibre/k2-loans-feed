@@ -1,7 +1,10 @@
 /** Contract of k2_loan GET /public/loans — keep in sync manually. */
 
+export type ListingStatus = "active" | "closed";
+
 export interface PublicLoan {
   id: string;
+  listing_status: ListingStatus;
   platform_name: string;
   platform_logo_url: string | null;
   rate: string;
@@ -20,6 +23,8 @@ export interface PublicLoansResponse {
   loans: PublicLoan[];
   meta: {
     total: number;
+    /** All ok + active loans (widget «Займов»). */
+    total_active: number;
     /** Highest rate in feed (max). */
     best_rate: string | null;
     /** All platforms configured in the system (not only those with loans in feed). */

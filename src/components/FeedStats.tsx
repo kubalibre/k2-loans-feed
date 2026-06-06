@@ -9,7 +9,7 @@ export function FeedStats({ meta, isFetching }: FeedStatsProps) {
   return (
     <div className="feed-stats">
       <div className="feed-stat">
-        <p className="feed-stat__value tabular-nums">{meta.total}</p>
+        <p className="feed-stat__value tabular-nums">{meta.total_active}</p>
         <p className="feed-stat__label">Займов</p>
       </div>
       <div className="feed-stat">

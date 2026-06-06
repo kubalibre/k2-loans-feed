@@ -1,4 +1,4 @@
-import type { PublicLoansResponse } from "./types";
+import type { ListingStatus, PublicLoansResponse } from "./types";
 
 const API_URL = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
 
@@ -9,9 +9,12 @@ export function getApiBaseUrl(): string {
   return API_URL;
 }
 
-/** Public feed: newest first (date desc), no client-side filters. */
-export async function fetchPublicLoans(): Promise<PublicLoansResponse> {
-  const response = await fetch(`${getApiBaseUrl()}/public/loans`);
+/** Public feed; listingStatus matches active/closed tab. */
+export async function fetchPublicLoans(
+  listingStatus: ListingStatus = "active",
+): Promise<PublicLoansResponse> {
+  const params = new URLSearchParams({ listingStatus });
+  const response = await fetch(`${getApiBaseUrl()}/public/loans?${params}`);
   if (!response.ok) {
     const text = await response.text();
     throw new Error(text || `HTTP ${response.status}`);

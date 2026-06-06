@@ -108,8 +108,13 @@ export function LoanCard({ loan }: LoanCardProps) {
   const showLtv = loan.ltv !== "—";
   const platformLabel = PLATFORM_LABEL[loan.platform_name] ?? loan.platform_name;
 
+  const isClosed = loan.listing_status === "closed";
+
   return (
-    <Card variant="secondary" className="loan-card w-full">
+    <Card
+      variant="secondary"
+      className={`loan-card w-full${isClosed ? " loan-card--closed" : ""}`}
+    >
       <Card.Content className="loan-card__body">
         <div className="loan-card__top">
           <FieldCell label="Сумма" value={loan.amount} valueVariant="primary" />

@@ -48,6 +48,7 @@ npm run dev    # http://localhost:5174
 | Компонент | Путь |
 |-----------|------|
 | Лента | `src/components/LoanFeed.tsx` |
+| Табы active/closed | `src/components/FeedTabs.tsx` |
 | Карточка | `src/components/LoanCard.tsx` |
 | Stats | `src/components/FeedStats.tsx` |
 | Стили | `src/index.css` |
@@ -70,7 +71,7 @@ npm run dev    # http://localhost:5174
 2. Mockup в `docs/mockups/` (HTML, двойной клик в Explorer).
 3. Дождаться **«ок» / «делай»** — только потом код.
 
-**Baseline (не менять без ok):** stats (займы / лучшая ставка = max / платформы в системе), карточка с логотипом, сумма·срок·ставка, вторичная строка, кнопка «Открыть займ», **без** sticky-шапки и **без** фильтров/сортировки в UI.
+**Baseline (не менять без ok):** stats сверху (`total_active` / best_rate / platforms_count), **табы «Активные»|«Закрытые»** под stats (`?listingStatus=`), closed — приглушённая карточка без бейджа; карточка с логотипом, сумма·срок·ставка, вторичная строка, CTA «Открыть»; **без** sticky-шапки и **без** фильтров по платформе в UI. Спека: k2_loan `docs/superpowers/specs/2026-06-05-loan-sync-design.md` §5.
 
 ---
 
