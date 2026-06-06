@@ -2,12 +2,6 @@ import { Card } from "@heroui/react";
 import type { PublicLoan } from "../api/types";
 import { openLoanUrl } from "../telegram/openExternal";
 
-const PLATFORM_LABEL: Record<string, string> = {
-  lender: "Lender",
-  vbeton: "Vbeton",
-  fintrack: "Fintrack",
-};
-
 interface LoanCardProps {
   loan: PublicLoan;
 }
@@ -76,7 +70,7 @@ function FieldCell({
 }
 
 function PlatformBadge({ loan }: { loan: PublicLoan }) {
-  const label = PLATFORM_LABEL[loan.platform_name] ?? loan.platform_name;
+  const label = loan.platform_name;
 
   return (
     <div className="loan-card__platform" translate="no">
@@ -106,7 +100,6 @@ function PlatformBadge({ loan }: { loan: PublicLoan }) {
 export function LoanCard({ loan }: LoanCardProps) {
   const details = buildDetailFields(loan);
   const showLtv = loan.ltv !== "—";
-  const platformLabel = PLATFORM_LABEL[loan.platform_name] ?? loan.platform_name;
 
   const isClosed = loan.listing_status === "closed";
 
@@ -151,7 +144,7 @@ export function LoanCard({ loan }: LoanCardProps) {
             <a
               href={loan.card_url}
               className="loan-card__link-cta"
-              aria-label={`Открыть займ на ${platformLabel}`}
+              aria-label={`Открыть займ на ${loan.platform_name}`}
               onClick={(e) => {
                 e.preventDefault();
                 openLoanUrl(loan.card_url);

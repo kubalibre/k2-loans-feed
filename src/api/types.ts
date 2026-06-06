@@ -5,6 +5,7 @@ export type ListingStatus = "active" | "closed";
 export interface PublicLoan {
   id: string;
   listing_status: ListingStatus;
+  /** Display name from admin (`Platform.name`). */
   platform_name: string;
   platform_logo_url: string | null;
   rate: string;
