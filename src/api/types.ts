@@ -2,6 +2,13 @@
 
 export type ListingStatus = "active" | "closed";
 
+export interface PublicPlatformSyncStats {
+  platform_name: string;
+  active_loans_count: number;
+  last_run_at: string | null;
+  last_run_status: "running" | "success" | "failed" | null;
+}
+
 export interface PublicLoan {
   id: string;
   listing_status: ListingStatus;
@@ -30,6 +37,7 @@ export interface PublicLoansResponse {
     best_rate: string | null;
     /** All platforms configured in the system (not only those with loans in feed). */
     platforms_count: number;
+    platforms: PublicPlatformSyncStats[];
     sortBy: string;
     sortOrder: "asc" | "desc";
   };

@@ -7,6 +7,7 @@ import { FeedStats } from "./FeedStats";
 import { FeedTabs } from "./FeedTabs";
 import { LoanCard } from "./LoanCard";
 import { LoanCardSkeleton } from "./LoanCardSkeleton";
+import { PlatformSyncTable } from "./PlatformSyncTable";
 
 const EMPTY_COPY: Record<ListingStatus, { title: string; description: string }> = {
   active: {
@@ -85,6 +86,13 @@ export function LoanFeed() {
           </ul>
         )}
       </div>
+
+      {!isLoading && !isError && data && data.meta.platforms.length > 0 && (
+        <PlatformSyncTable
+          platforms={data.meta.platforms}
+          platformsCount={data.meta.platforms_count}
+        />
+      )}
 
       {isFetching && !isLoading && !isError && (
         <div className="pointer-events-none fixed bottom-6 left-1/2 z-30 -translate-x-1/2">

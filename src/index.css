@@ -356,6 +356,79 @@ body {
   outline-offset: 2px;
 }
 
+.feed-platform-table {
+  margin-top: calc(var(--spacing) * 6);
+}
+
+.feed-platform-table__title {
+  margin: 0 0 calc(var(--spacing) * 2);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.feed-platform-table__grid {
+  width: 100%;
+  border-collapse: collapse;
+  border: var(--app-border);
+  border-radius: var(--app-radius);
+  background: var(--surface);
+  font-size: 0.8125rem;
+  table-layout: fixed;
+}
+
+.feed-platform-table__grid th,
+.feed-platform-table__grid td {
+  padding: 10px 12px;
+  border-bottom: var(--app-border);
+  vertical-align: middle;
+}
+
+.feed-platform-table__grid thead th {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+}
+
+.feed-platform-table__grid tbody tr:last-child th,
+.feed-platform-table__grid tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.feed-platform-table__name {
+  font-weight: 500;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.feed-platform-table__col-numeric {
+  width: 3.25rem;
+  text-align: center;
+}
+
+.feed-platform-table__col-date {
+  width: 7.5rem;
+  text-align: right;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.feed-platform-table__grid thead .feed-platform-table__col-numeric,
+.feed-platform-table__grid thead .feed-platform-table__col-date {
+  text-align: center;
+}
+
+.feed-platform-table__grid thead .feed-platform-table__col-date {
+  text-align: right;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .loan-card__link-cta {
     transition: none;
