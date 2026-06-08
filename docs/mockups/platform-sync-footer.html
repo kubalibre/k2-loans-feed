@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Footer — таблица платформ (согласовано 2026-06-08)</title>
+  <style>
+    :root {
+      --bg: #141414;
+      --surface: #1e1e1e;
+      --text: #e4e4e4;
+      --muted: #888;
+      --border: #333;
+      --phone-w: 390px;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      line-height: 1.45;
+    }
+    h1 { font-size: 1.125rem; margin: 0 0 6px; }
+    .intro { color: var(--muted); font-size: 0.8125rem; max-width: 36rem; margin-bottom: 16px; }
+    .phone {
+      max-width: var(--phone-w);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .phone-bar {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .phone-content { padding: 14px; }
+    .feed-platform-table { margin-top: 24px; }
+    .feed-platform-table__title {
+      margin: 0 0 8px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .feed-platform-table__grid {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      font-size: 13px;
+      table-layout: fixed;
+    }
+    .feed-platform-table__grid th,
+    .feed-platform-table__grid td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .feed-platform-table__grid thead th {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      text-align: left;
+    }
+    .feed-platform-table__grid tbody tr:last-child th,
+    .feed-platform-table__grid tbody tr:last-child td { border-bottom: none; }
+    .feed-platform-table__name {
+      font-weight: 500;
+      text-align: left;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .feed-platform-table__col-numeric { width: 52px; text-align: center; font-variant-numeric: tabular-nums; }
+    .feed-platform-table__col-date {
+      width: 96px;
+      text-align: right;
+      font-size: 12px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+    .feed-platform-table__grid thead .feed-platform-table__col-numeric { text-align: center; }
+    .feed-platform-table__grid thead .feed-platform-table__col-date { text-align: right; }
+  </style>
+</head>
+<body>
+  <h1>Footer: таблица платформ</h1>
+  <p class="intro">3 колонки, mobile-first, без логотипов и horizontal scroll. Реализация: <code>PlatformSyncTable.tsx</code>.</p>
+
+  <div class="phone">
+    <div class="phone-bar">390px · после списка займов</div>
+    <div class="phone-content">
+      <section class="feed-platform-table" aria-labelledby="title">
+        <h2 id="title" class="feed-platform-table__title">Платформы · 4</h2>
+        <table class="feed-platform-table__grid">
+          <thead>
+            <tr>
+              <th scope="col">Платформа</th>
+              <th scope="col" class="feed-platform-table__col-numeric">Займы</th>
+              <th scope="col" class="feed-platform-table__col-date">Последняя проверка</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row" class="feed-platform-table__name" title="Лендер-Инвест">Лендер-Инвест</th>
+              <td class="feed-platform-table__col-numeric">1</td>
+              <td class="feed-platform-table__col-date">08.06 14:32</td>
+            </tr>
+            <tr>
+              <th scope="row" class="feed-platform-table__name" title="Магнум">Магнум</th>
+              <td class="feed-platform-table__col-numeric">3</td>
+              <td class="feed-platform-table__col-date">08.06 14:30</td>
+            </tr>
+            <tr>
+              <th scope="row" class="feed-platform-table__name" title="В БЕТОН">В БЕТОН</th>
+              <td class="feed-platform-table__col-numeric">1</td>
+              <td class="feed-platform-table__col-date">08.06 14:28</td>
+            </tr>
+            <tr>
+              <th scope="row" class="feed-platform-table__name" title="ФинТрек">ФинТрек</th>
+              <td class="feed-platform-table__col-numeric">0</td>
+              <td class="feed-platform-table__col-date">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+</body>
+</html>
