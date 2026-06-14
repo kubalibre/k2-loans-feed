@@ -454,12 +454,17 @@ body {
   letter-spacing: 0.04em;
 }
 
-.feed-platform-table__grid {
-  width: 100%;
-  border-collapse: collapse;
+.feed-platform-table__card {
   border: var(--app-border);
   border-radius: var(--app-radius);
   background: var(--surface);
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.feed-platform-table__grid {
+  width: 100%;
+  border-collapse: collapse;
   font-size: 0.8125rem;
   table-layout: fixed;
 }

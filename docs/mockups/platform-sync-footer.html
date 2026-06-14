@@ -49,12 +49,15 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
-    .feed-platform-table__grid {
-      width: 100%;
-      border-collapse: collapse;
+    .feed-platform-table__card {
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: var(--surface);
+      overflow: hidden;
+    }
+    .feed-platform-table__grid {
+      width: 100%;
+      border-collapse: collapse;
       font-size: 13px;
       table-layout: fixed;
     }
@@ -102,6 +105,7 @@
     <div class="phone-content">
       <section class="feed-platform-table" aria-labelledby="title">
         <h2 id="title" class="feed-platform-table__title">Платформы · 4</h2>
+        <div class="feed-platform-table__card">
         <table class="feed-platform-table__grid">
           <thead>
             <tr>
@@ -133,6 +137,7 @@
             </tr>
           </tbody>
         </table>
+        </div>
       </section>
     </div>
   </div>

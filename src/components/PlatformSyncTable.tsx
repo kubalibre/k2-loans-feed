@@ -26,34 +26,36 @@ export function PlatformSyncTable({ platforms, platformsCount }: PlatformSyncTab
       <h2 id="feed-platform-table-title" className="feed-platform-table__title">
         Платформы · {platformsCount}
       </h2>
-      <table className="feed-platform-table__grid">
-        <thead>
-          <tr>
-            <th scope="col">Платформа</th>
-            <th scope="col" className="feed-platform-table__col-numeric">
-              Займы
-            </th>
-            <th scope="col" className="feed-platform-table__col-date">
-              Последняя проверка
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {platforms.map((platform) => (
-            <tr key={platform.platform_name}>
-              <th scope="row" className="feed-platform-table__name" title={platform.platform_name}>
-                {platform.platform_name}
+      <div className="feed-platform-table__card">
+        <table className="feed-platform-table__grid">
+          <thead>
+            <tr>
+              <th scope="col">Платформа</th>
+              <th scope="col" className="feed-platform-table__col-numeric">
+                Займы
               </th>
-              <td className="feed-platform-table__col-numeric tabular-nums">
-                {platform.active_loans_count}
-              </td>
-              <td className="feed-platform-table__col-date tabular-nums">
-                {formatLastRun(platform)}
-              </td>
+              <th scope="col" className="feed-platform-table__col-date">
+                Последняя проверка
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {platforms.map((platform) => (
+              <tr key={platform.platform_name}>
+                <th scope="row" className="feed-platform-table__name" title={platform.platform_name}>
+                  {platform.platform_name}
+                </th>
+                <td className="feed-platform-table__col-numeric tabular-nums">
+                  {platform.active_loans_count}
+                </td>
+                <td className="feed-platform-table__col-date tabular-nums">
+                  {formatLastRun(platform)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }
