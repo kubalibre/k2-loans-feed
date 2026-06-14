@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RateHistory — Recharts mockup</title>
+  <style>
+    :root {
+      --bg: #141414;
+      --surface: #1e1e1e;
+      --text: #e4e4e4;
+      --muted: #888;
+      --border: #333;
+      --accent: #6ea8fe;
+      --phone-w: 390px;
+      --radius: 12px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+    }
+    h1 { font-size: 1.125rem; margin: 0 0 6px; }
+    .intro { color: var(--muted); font-size: 0.8125rem; margin-bottom: 16px; max-width: 32rem; }
+    .phone {
+      max-width: var(--phone-w);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .phone-bar {
+      text-align: center;
+      font-size: 11px;
+      color: var(--muted);
+      padding: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .phone-content { padding: 14px; }
+    .feed-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .feed-stat {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+    }
+    .feed-stat__value { margin: 0; font-size: 1rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .feed-stat__label {
+      margin: 2px 0 0;
+      font-size: 0.6875rem;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .rate-history-chart {
+      padding: 4px 0;
+      margin-bottom: 12px;
+    }
+    .rate-tooltip {
+      background: #2a2a2a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+      line-height: 1.35;
+      font-variant-numeric: tabular-nums;
+      color: var(--text);
+    }
+    .rate-tooltip .title {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+    .rate-tooltip .trend-up { color: #4ade80; }
+    .rate-tooltip .trend-down { color: #f87171; }
+    .feed-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .feed-tab {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .feed-tab--active { border-color: var(--accent); color: var(--text); }
+    #chart-root { width: 100%; height: 48px; }
+    .err { color: #f87171; font-size: 12px; padding: 8px; }
+  </style>
+</head>
+<body>
+  <h1>RateHistoryChart — Recharts</h1>
+  <p class="intro">Один столбик на день: <strong>avg</strong> (низ) + <strong>max−avg</strong> (верх). Tooltip 3 строки + ↑↓.</p>
+
+  <div class="phone">
+    <div class="phone-bar">390px · recharts BarChart</div>
+    <div class="phone-content">
+      <div class="feed-stats">
+        <div class="feed-stat"><p class="feed-stat__value">7</p><p class="feed-stat__label">Займов</p></div>
+        <div class="feed-stat"><p class="feed-stat__value">26%</p><p class="feed-stat__label">Лучшая ставка</p></div>
+        <div class="feed-stat"><p class="feed-stat__value">4</p><p class="feed-stat__label">Платформ</p></div>
+      </div>
+      <div class="rate-history-chart">
+        <div id="chart-root"></div>
+      </div>
+      <div class="feed-tabs">
+        <div class="feed-tab feed-tab--active">Активные</div>
+        <div class="feed-tab">Закрытые</div>
+      </div>
+    </div>
+  </div>
+
+  <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
+  <script crossorigin src="https://unpkg.com/recharts@2.15.3/umd/Recharts.js"></script>
+  <script>
+    (function () {
+      const { createElement: h, useState } = React;
+      const { createRoot } = ReactDOM;
+      const { BarChart, Bar, Tooltip } = Recharts;
+
+      const DAYS = 45;
+      const daily = [];
+      let avg = 17.5;
+      for (let i = 0; i < DAYS; i++) {
+        avg += (Math.random() - 0.48) * 0.8;
+        avg = Math.max(14, Math.min(22, avg));
+        const max = avg + 4 + Math.random() * 3;
+        const d = new Date();
+        d.setDate(d.getDate() - (DAYS - 1 - i));
+        daily.push({
+          i,
+          date: d.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric" }).replace(/\//g, "."),
+          max_rate: Math.round(max * 10) / 10,
+          avg_rate: Math.round(avg * 10) / 10,
+          avg_part: Math.round(avg * 10) / 10,
+          max_part: Math.round((max - avg) * 10) / 10,
+        });
+      }
+
+      function formatRate(n) {
+        return Number.isInteger(n) ? n + "%" : n + "%";
+      }
+
+      function avgTrend(index) {
+        if (index === 0) return null;
+        const prev = daily[index - 1].avg_rate;
+        const cur = daily[index].avg_rate;
+        if (cur > prev) return "up";
+        if (cur < prev) return "down";
+        return null;
+      }
+
+      function RateTooltip(props) {
+        const { active, payload } = props;
+        if (!active || !payload || !payload.length) return null;
+        const row = payload[0].payload;
+        const trend = avgTrend(row.i);
+        return h(
+          "div",
+          { className: "rate-tooltip" },
+          h("div", { className: "title" }, "Ставка"),
+          h("div", { className: "date" }, row.date),
+          h("div", null, "макс " + formatRate(row.max_rate)),
+          h(
+            "div",
+            null,
+            "ср. " + formatRate(row.avg_rate),
+            trend === "up" ? h("span", { className: "trend-up" }, " ↑") : null,
+            trend === "down" ? h("span", { className: "trend-down" }, " ↓") : null
+          )
+        );
+      }
+
+      function Chart() {
+        const [width, setWidth] = useState(330);
+        const ref = React.useRef(null);
+        React.useEffect(function () {
+          if (!ref.current) return;
+          setWidth(ref.current.clientWidth || 330);
+          const ro = new ResizeObserver(function (entries) {
+            setWidth(entries[0].contentRect.width || 330);
+          });
+          ro.observe(ref.current);
+          return function () { ro.disconnect(); };
+        }, []);
+
+        return h(
+          "div",
+          { ref: ref, style: { width: "100%", height: 48 } },
+          h(
+            BarChart,
+            {
+              width: width,
+              height: 48,
+              data: daily,
+              margin: { top: 0, right: 0, left: 0, bottom: 0 },
+              barGap: 0,
+              barCategoryGap: "6%",
+            },
+            h(Tooltip, {
+              content: h(RateTooltip),
+              cursor: { fill: "rgba(110,168,254,0.08)" },
+              isAnimationActive: false,
+            }),
+            h(Bar, {
+              dataKey: "avg_part",
+              stackId: "day",
+              fill: "rgba(136,136,136,0.55)",
+              radius: [0, 0, 0, 0],
+              isAnimationActive: false,
+            }),
+            h(Bar, {
+              dataKey: "max_part",
+              stackId: "day",
+              fill: "#6ea8fe",
+              radius: [1, 1, 0, 0],
+              isAnimationActive: false,
+            })
+          )
+        );
+      }
+
+      try {
+        createRoot(document.getElementById("chart-root")).render(h(Chart));
+      } catch (e) {
+        document.getElementById("chart-root").innerHTML =
+          '<p class="err">Recharts не загрузился: ' + e.message + "</p>";
+      }
+    })();
+  </script>
+</body>
+</html>

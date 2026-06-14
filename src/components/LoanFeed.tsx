@@ -1,13 +1,14 @@
 import { Alert, Button, Spinner } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { fetchPublicLoans } from "../api/client";
+import { fetchPublicLoans, fetchRateHistory } from "../api/client";
 import type { ListingStatus } from "../api/types";
 import { FeedStats } from "./FeedStats";
 import { FeedTabs } from "./FeedTabs";
 import { LoanCard } from "./LoanCard";
 import { LoanCardSkeleton } from "./LoanCardSkeleton";
 import { PlatformSyncTable } from "./PlatformSyncTable";
+import { RateHistoryChart } from "./RateHistoryChart";
 
 const EMPTY_COPY: Record<ListingStatus, { title: string; description: string }> = {
   active: {
@@ -29,6 +30,12 @@ export function LoanFeed() {
     staleTime: 60_000,
   });
 
+  const rateHistory = useQuery({
+    queryKey: ["rate-history", 45],
+    queryFn: () => fetchRateHistory(45),
+    staleTime: 300_000,
+  });
+
   const empty = EMPTY_COPY[listingStatus];
 
   return (
@@ -40,6 +47,8 @@ export function LoanFeed() {
           <FeedStats meta={data.meta} isFetching={isFetching && !isLoading} />
         )}
       </header>
+
+      {rateHistory.data && <RateHistoryChart points={rateHistory.data.points} />}
 
       <FeedTabs value={listingStatus} onChange={setListingStatus} />
 

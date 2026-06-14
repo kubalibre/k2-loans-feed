@@ -113,6 +113,57 @@ body {
   letter-spacing: 0.04em;
 }
 
+.rate-history-chart {
+  position: relative;
+  padding: 4px 0;
+  margin-bottom: calc(var(--spacing) * 3);
+  touch-action: none;
+  user-select: none;
+}
+
+.rate-history-chart .recharts-wrapper {
+  cursor: crosshair;
+}
+
+.rate-history-tooltip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%);
+  pointer-events: none;
+  background: var(--surface);
+  border: var(--app-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  opacity: 0;
+  z-index: 2;
+}
+
+.rate-history-tooltip.visible {
+  opacity: 1;
+}
+
+.rate-history-tooltip__title {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.rate-history-tooltip .trend-up {
+  color: #4ade80;
+}
+
+.rate-history-tooltip .trend-down {
+  color: #f87171;
+}
+
 .feed-tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -42,3 +42,16 @@ export interface PublicLoansResponse {
     sortOrder: "asc" | "desc";
   };
 }
+
+export interface PublicRateDailyPoint {
+  date: string;
+  max_rate: number;
+  avg_rate: number;
+  loan_count: number;
+}
+
+export interface PublicRateHistoryResponse {
+  timezone: "Europe/Moscow";
+  days: number;
+  points: PublicRateDailyPoint[];
+}

@@ -1,4 +1,4 @@
-import type { ListingStatus, PublicLoansResponse } from "./types";
+import type { ListingStatus, PublicLoansResponse, PublicRateHistoryResponse } from "./types";
 
 const API_URL = (import.meta.env.VITE_API_URL as string | undefined)?.replace(/\/$/, "") ?? "";
 
@@ -20,4 +20,14 @@ export async function fetchPublicLoans(
     throw new Error(text || `HTTP ${response.status}`);
   }
   return response.json() as Promise<PublicLoansResponse>;
+}
+
+export async function fetchRateHistory(days = 45): Promise<PublicRateHistoryResponse> {
+  const params = new URLSearchParams({ days: String(days) });
+  const response = await fetch(`${getApiBaseUrl()}/public/rate-history?${params}`);
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(text || `HTTP ${response.status}`);
+  }
+  return response.json() as Promise<PublicRateHistoryResponse>;
 }
