@@ -115,14 +115,48 @@ body {
 
 .rate-history-chart {
   position: relative;
+  width: 100%;
+  min-height: 48px;
   padding: 4px 0;
   margin-bottom: calc(var(--spacing) * 3);
   touch-action: none;
   user-select: none;
 }
 
+.rate-history-chart--loading {
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklch, var(--muted) 12%, transparent) 0%,
+    color-mix(in oklch, var(--muted) 22%, transparent) 50%,
+    color-mix(in oklch, var(--muted) 12%, transparent) 100%
+  );
+  background-size: 200% 100%;
+  animation: rate-history-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes rate-history-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
 .rate-history-chart .recharts-wrapper {
   cursor: crosshair;
+}
+
+/* Fills via CSS — SVG presentation attributes ignore var()/color-mix in Telegram WebView */
+.rate-history-chart .rate-history-bar-avg path {
+  fill: rgba(136, 136, 136, 0.45);
+  fill: color-mix(in oklch, var(--muted) 55%, transparent);
+}
+
+.rate-history-chart .rate-history-bar-max path {
+  fill: #6ea8fe;
+  fill: var(--accent);
 }
 
 .rate-history-tooltip {

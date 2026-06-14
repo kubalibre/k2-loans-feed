@@ -34,6 +34,7 @@ export function LoanFeed() {
     queryKey: ["rate-history", 45],
     queryFn: () => fetchRateHistory(45),
     staleTime: 300_000,
+    retry: 3,
   });
 
   const empty = EMPTY_COPY[listingStatus];
@@ -48,7 +49,12 @@ export function LoanFeed() {
         )}
       </header>
 
-      {rateHistory.data && <RateHistoryChart points={rateHistory.data.points} />}
+      {rateHistory.isPending && (
+        <div className="rate-history-chart rate-history-chart--loading" aria-hidden="true" />
+      )}
+      {rateHistory.isSuccess && rateHistory.data.points.length > 0 && (
+        <RateHistoryChart points={rateHistory.data.points} />
+      )}
 
       <FeedTabs value={listingStatus} onChange={setListingStatus} />
 

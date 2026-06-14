@@ -108,13 +108,13 @@ export function RateHistoryChart({ points }: RateHistoryChartProps) {
           <Bar
             dataKey="avg_part"
             stackId="day"
-            fill="color-mix(in oklch, var(--muted) 55%, transparent)"
+            className="rate-history-bar-avg"
             isAnimationActive={false}
           />
           <Bar
             dataKey="max_part"
             stackId="day"
-            fill="var(--accent)"
+            className="rate-history-bar-max"
             radius={[1, 1, 0, 0]}
             isAnimationActive={false}
           />
